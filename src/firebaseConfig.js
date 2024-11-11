@@ -3,12 +3,12 @@ import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDnfByT5N7chJztsaognnkSGnJc0guJjo0",
-  authDomain: "web-app-music.firebaseapp.com",
-  projectId: "web-app-music",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "719559863784",
-  appId: "YOUR_APP_ID",
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID
 };
 
 // Initialize Firebase
