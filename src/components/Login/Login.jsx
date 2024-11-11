@@ -29,7 +29,6 @@ const Login = () => {
         const result = await signInWithPopup(auth, googleProvider);
         const user = result.user;
         const idToken = await user.getIdToken();
-        console.log(idToken);
         const response = await fetch(API_ENDPOINTS.GOOGLE_LOGIN, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
