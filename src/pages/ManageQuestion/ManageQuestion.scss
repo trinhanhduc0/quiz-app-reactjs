@@ -1,0 +1,12 @@
+.ant-spin-container {
+  width: 100%;
+}
+.ant-card-body {
+  width: 100vw;
+}
+.ant-modal-body {
+  width: 100%;
+  .ant-card-body {
+    width: 100%;
+  }
+}

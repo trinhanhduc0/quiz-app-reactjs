@@ -1,0 +1,94 @@
+.sidebar {
+  width: 260px;
+  max-width: 80vw;
+  height: 100vh;
+  background-color: #f8fafc;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  left: 0;
+  top: 0;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  z-index: 10;
+  box-shadow: 3px 0 15px rgba(0, 0, 0, 0.1);
+
+  &.open {
+    transform: translateX(0);
+    box-shadow: 5px 0 15px rgba(0, 0, 0, 0.2); // Tạo bóng đổ nổi bật hơn khi mở
+  }
+
+  .top-side {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background: linear-gradient(
+      135deg,
+      #4267b2,
+      #4e8de5
+    ); // Gradient từ xanh đậm tới nhạt
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    border-bottom-left-radius: 5px; // Bo góc dưới để tăng tính thẩm mỹ
+    border-bottom-right-radius: 55px;
+
+    a {
+      color: #ffffff;
+      font-size: 2rem; // Tăng kích thước chữ
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); // Tạo bóng chữ tinh tế
+      transition: transform 0.2s ease, color 0.2s ease;
+      position: relative;
+
+      &:hover {
+        color: #cde3ff; // Màu sáng hơn khi hover
+        transform: scale(1.05); // Phóng to nhẹ khi hover
+      }
+    }
+  }
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 1rem;
+
+    li {
+      margin: 1rem 0;
+
+      a {
+        color: #4a4a4a;
+        text-decoration: none;
+        padding: 1rem 1.5rem;
+        display: flex;
+        align-items: center;
+        border-radius: 12px;
+        font-weight: 500;
+        font-size: 1rem;
+        transition: background-color 0.2s ease, color 0.2s ease,
+          transform 0.15s ease;
+
+        &:hover {
+          background-color: #e3f2fd;
+          color: #4267b2;
+          box-shadow: inset 4px 0 0 #4267b2;
+          transform: translateX(4px);
+        }
+
+        .icon {
+          margin-right: 0.8rem;
+          font-size: 1.4rem;
+          color: #5f6368;
+          transition: color 0.2s ease, transform 0.15s ease;
+
+          a:hover & {
+            color: #4267b2;
+            transform: scale(1.1);
+          }
+        }
+      }
+    }
+  }
+}
