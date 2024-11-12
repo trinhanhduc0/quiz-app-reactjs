@@ -6,7 +6,6 @@ import {
   saveTest,
   deleteTest,
 } from "~/redux/test/testSlice";
-import { apiCallGet } from "~/services/apiCallService";
 import dayjs from "dayjs";
 
 import {
@@ -28,7 +27,6 @@ import {
   InputNumber,
 } from "antd";
 import { TagsTwoTone, EditTwoTone, DeleteOutlined } from "@ant-design/icons";
-import API_ENDPOINTS from "~/config/config";
 import "./ManageTest.scss";
 import ManageQuestion from "../ManageQuestion/ManageQuestion";
 

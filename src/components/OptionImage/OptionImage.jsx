@@ -2,25 +2,26 @@ import React, { useState, useEffect } from "react";
 import API_ENDPOINTS from "~/config/config";
 import TokenService from "~/services/TokenService";
 import Image from "./Image";
-
+import { useNavigate } from "react-router-dom";
 const OptionImage = ({ imageUrl, email, width = 200, height = "auto" }) => {
   const [imageSrc, setImageSrc] = useState();
+  const navigate = useNavigate();
 
   const fetchImage = async () => {
     try {
-      // Check if image is already cached in sessionStorage
+      // Kiểm tra nếu hình ảnh đã được lưu trữ trong sessionStorage
       const cachedImage = sessionStorage.getItem(imageUrl);
       if (cachedImage) {
         setImageSrc(cachedImage);
         return;
       }
 
-      // If not cached, fetch the image from the server
+      // Nếu chưa có trong cache, thực hiện yêu cầu lấy hình ảnh từ server
       const response = await fetch(API_ENDPOINTS.IMAGE, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
           Authorization: TokenService.getToken(),
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           email: email,
@@ -29,6 +30,9 @@ const OptionImage = ({ imageUrl, email, width = 200, height = "auto" }) => {
       });
 
       if (!response.ok) {
+        if (response.status === 401 && navigate) {
+          navigate("/login");
+        }
         throw new Error("Failed to fetch image");
       }
 

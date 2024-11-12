@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import API_ENDPOINTS from "~/config/config";
-import TokenService from "~/services/TokenService";
 
 const ComponentImage = ({ content, width = 200, height = "auto" }) => {
   const [imageSrc, setImageSrc] = useState();

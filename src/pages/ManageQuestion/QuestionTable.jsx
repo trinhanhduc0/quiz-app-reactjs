@@ -99,7 +99,7 @@ const QuestionTable = ({
       ),
     },
     {
-      name: "Question",
+      name: `Total ${questions.length} Question`,
       selector: (row) => row.question_content.text,
       sortable: true,
       cell: (row) => (

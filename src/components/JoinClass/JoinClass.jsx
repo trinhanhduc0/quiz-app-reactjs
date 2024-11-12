@@ -3,20 +3,25 @@ import { Modal } from "antd";
 import API_ENDPOINTS from "~/config/config";
 import { apiCall } from "~/services/apiCallService";
 import "./JoinClass.scss";
-
+import { useNavigate } from "react-router-dom";
 function JoinClass({ isOpen, onRequestClose }) {
   const [classId, setClassId] = useState("");
   const [statusMessage, setStatusMessage] = useState("");
-
+  const navigate = useNavigate();
   const handleInputChange = (event) => {
     setClassId(event.target.value);
   };
 
   const handleJoinClass = async () => {
     setStatusMessage("Joining class...");
-    const response = await apiCall(API_ENDPOINTS.JOINCLASS, "POST", {
-      _id: classId,
-    });
+    const response = await apiCall(
+      API_ENDPOINTS.JOINCLASS,
+      "POST",
+      {
+        _id: classId,
+      },
+      navigate
+    );
     // Check if the response contains a success field
     if (response.success) {
       setStatusMessage("Successfully joined the class!");

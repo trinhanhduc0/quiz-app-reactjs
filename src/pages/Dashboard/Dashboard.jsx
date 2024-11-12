@@ -24,7 +24,7 @@ const Dashboard = () => {
       });
       if (!response.ok) {
         if (response.status === 401) {
-          //window.location.href = "/login";
+          navigate("/login");
         }
         throw new Error("Network response was not ok");
       }

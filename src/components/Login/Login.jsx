@@ -29,11 +29,15 @@ const Login = () => {
         const result = await signInWithPopup(auth, googleProvider);
         const user = result.user;
         const idToken = await user.getIdToken();
-        const response = await fetch(API_ENDPOINTS.GOOGLE_LOGIN, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ token: idToken }),
-        });
+        const response = await fetch(
+          API_ENDPOINTS.GOOGLE_LOGIN,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ token: idToken }),
+          },
+          navigate
+        );
         const data = await response.json();
         await TokenService.saveToken(data.token);
         navigate("/dashboard");

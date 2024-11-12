@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useCookies } from "react-cookie";
+import { useNavigate } from "react-router-dom";
 import {
   Button,
   Modal,
@@ -154,6 +155,7 @@ const ClassCodeComponent = ({ _id, createCode }) => {
 
 function ManageClass() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [, forceUpdate] = useState({});
   const { allClass, status, error } = useSelector((state) => state.classes);
   const [newStudent, setNewStudent] = useState("");
@@ -176,7 +178,7 @@ function ManageClass() {
 
   const fetchTests = useCallback(async () => {
     try {
-      const res = await apiCallGet(API_ENDPOINTS.TESTS);
+      const res = await apiCallGet(API_ENDPOINTS.TESTS, navigate);
       setAllTest(res || res.data);
     } catch (err) {
       console.error("Failed to fetch tests:", err);

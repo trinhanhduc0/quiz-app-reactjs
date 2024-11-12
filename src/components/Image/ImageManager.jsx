@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Modal, List, Button, message, Upload } from "antd";
 import { apiCallGet, apiUploadImage } from "~/services/apiCallService";
+
 import API_ENDPOINTS from "~/config/config";
 import ComponentImage from "~/components/OptionImage/ComponentImage";
 import { UploadOutlined } from "@ant-design/icons";
-
+import { useNavigate } from "react-router-dom";
 function ImageManage({ isOpen, onClose, onSelectImage }) {
   const [listImage, setListImage] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const navigate = useNavigate();
   useEffect(() => {
     if (isOpen) {
       fetchListImage();
@@ -18,7 +19,7 @@ function ImageManage({ isOpen, onClose, onSelectImage }) {
   const fetchListImage = async () => {
     try {
       setLoading(true);
-      const res = await apiCallGet(API_ENDPOINTS.GETIMAGEFILES);
+      const res = await apiCallGet(API_ENDPOINTS.GETIMAGEFILES, navigate);
       console.log(res);
       setListImage(res || []);
     } catch (error) {
@@ -32,7 +33,11 @@ function ImageManage({ isOpen, onClose, onSelectImage }) {
     formData.append("file", file);
 
     try {
-      const res = await apiUploadImage(API_ENDPOINTS.UPLOAD_IMAGE, formData);
+      const res = await apiUploadImage(
+        API_ENDPOINTS.UPLOAD_IMAGE,
+        formData,
+        navigate
+      );
       if (res.ok) {
         const responseText = await res.text();
         console.log("Server response:", responseText);

@@ -4,6 +4,7 @@ import TokenService from "~/services/TokenService";
 import API_ENDPOINTS from "~/config/config";
 import { Spin, Alert } from "antd"; // Thêm Spin cho loading và Alert cho thông báo lỗi
 import "./ListTest.scss";
+import { apiCall } from "../../services/apiCallService";
 
 const ListTest = () => {
   const navigate = useNavigate();
@@ -20,23 +21,16 @@ const ListTest = () => {
     setLoading(true);
     setError(null); // Reset lỗi khi bắt đầu tải dữ liệu
     try {
-      const testsResponse = await fetch(API_ENDPOINTS.GETTESTS, {
-        method: "POST",
-        headers: {
-          Authorization: TokenService.getToken(),
-        },
-        body: JSON.stringify({
+      const testsResponse = await apiCall(
+        API_ENDPOINTS.GETTESTS,
+        "POST",
+        {
           _id: testIds,
-        }),
-      });
+        },
+        navigate
+      );
 
-      if (!testsResponse.ok) {
-        const errorMessage = await testsResponse.text();
-        console.error("Server Error:", errorMessage);
-        throw new Error("Failed to fetch tests");
-      }
-
-      const testsData = await testsResponse.json();
+      const testsData = await testsResponse;
       setTests(testsData);
     } catch (error) {
       setError("There was an error loading the tests. Please try again later.");

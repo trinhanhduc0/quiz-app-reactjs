@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import TokenService from "~/services/TokenService";
 import API_ENDPOINTS from "~/config/config";
 import { apiCall } from "~/services/apiCallService";
@@ -17,6 +17,7 @@ import {
 } from "@ant-design/icons";
 
 const DoTest = () => {
+  const navigate = useNavigate();
   const { isTest, author, testId } = useParams();
   const questionCache = `questions_${testId}`;
   const answerCache = "quizAnswers";
@@ -116,10 +117,15 @@ const DoTest = () => {
         return { question_id: questionId, options: [] };
       }
     );
-    const response = await apiCall(API_ENDPOINTS.SENDTEST, "POST", {
-      test_id: testId,
-      question_answer,
-    });
+    const response = await apiCall(
+      API_ENDPOINTS.SENDTEST,
+      "POST",
+      {
+        test_id: testId,
+        question_answer,
+      },
+      navigate
+    );
     localStorage.removeItem(questionCache);
     localStorage.removeItem(answerCache);
     window.location.reload();
@@ -185,38 +191,29 @@ const DoTest = () => {
           setLoading(false);
           return;
         }
-
-        const body = JSON.stringify({
-          author_mail: author,
-          _id: testId,
-          is_test: isTest === "true",
-        });
-        const response = await fetch(API_ENDPOINTS.GETQUESTIONS, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: TokenService.getToken(),
+        const response = await apiCall(
+          API_ENDPOINTS.GETQUESTIONS,
+          "POST",
+          {
+            author_mail: author,
+            _id: testId,
+            is_test: isTest === "true",
           },
-          body,
-        });
+          navigate
+        );
 
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
+        localStorage.setItem(questionCache, JSON.stringify(response));
 
-        const data = await response.json();
-        localStorage.setItem(questionCache, JSON.stringify(data));
-
-        if (data.hasOwnProperty("answer")) {
+        if (response.hasOwnProperty("answer")) {
           setIsDone(true);
-          setScore(data.answer.score);
-          const loadedQuestions = simplifyAnswerData(data.answer);
+          setScore(response.answer.score);
+          const loadedQuestions = simplifyAnswerData(response.answer);
           setAnswers(loadedQuestions);
         } else {
-          setInfoTest(data.test_info);
-          startCountdown(data.test_info);
+          setInfoTest(response.test_info);
+          startCountdown(response.test_info);
         }
-        setQuestions(data.questions || []);
+        setQuestions(response.questions || []);
       } catch (error) {
         setError("Error fetching questions");
         console.error("Error fetching questions:", error);
@@ -334,19 +331,22 @@ const DoTest = () => {
               icon={<RightOutlined />}
               className="navigation-btn"
             />
-            <Button
-              size="large"
-              onClick={handleSendTest}
-              className="submit-test-btn"
-              type="primary"
-              icon={<CheckOutlined />}
-              style={{
-                borderRadius: "8px",
-                backgroundColor: "#4CAF50",
-                borderColor: "#4CAF50",
-                color: "#ffffff",
-              }}
-            />
+
+            {!isDone && (
+              <Button
+                size="large"
+                onClick={handleSendTest}
+                className="submit-test-btn"
+                type="primary"
+                icon={<CheckOutlined />}
+                style={{
+                  borderRadius: "8px",
+                  backgroundColor: "#4CAF50",
+                  borderColor: "#4CAF50",
+                  color: "#ffffff",
+                }}
+              />
+            )}
           </div>
 
           <Button
@@ -359,15 +359,10 @@ const DoTest = () => {
           <Modal
             title="Select Question"
             className="modal-question"
-            visible={isModalVisible}
+            open={isModalVisible}
             onCancel={handleCloseModal}
             footer={null}
             centered
-            bodyStyle={{
-              maxHeight: "60vh",
-              overflowY: "auto",
-              padding: "10px",
-            }}
           >
             <div className="question-status flex flex-wrap gap-2 justify-center">
               {questions.map((question, index) => (
