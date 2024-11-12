@@ -1,5 +1,6 @@
 import TokenService from "~/services/TokenService";
-
+import { useNavigate } from 'react-router-dom';
+const navigate = useNavigate();
 // Utility function for API calls
 export const apiCallGet = async (endpoint) => {
   const response = await fetch(endpoint, {
@@ -12,7 +13,7 @@ export const apiCallGet = async (endpoint) => {
   console.log(response);
   if (!response.ok) {
     if (response.status === 401) {
-      //window.location.href = "/login";
+      navigate('/login');
     }
     throw new Error(`HTTP error! status: ${response.status}`);
   }
