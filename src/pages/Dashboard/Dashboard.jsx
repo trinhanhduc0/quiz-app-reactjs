@@ -5,6 +5,7 @@ import API_ENDPOINTS from "~/config/config";
 import "./Dashboard.scss";
 import JoinClass from "~/components/JoinClass/JoinClass";
 import { Button, Spin } from "antd"; // Thêm Spin cho loading state
+import { apiCallGet } from "../../services/apiCallService";
 
 const Dashboard = () => {
   const [classes, setClasses] = useState([]);
@@ -16,12 +17,10 @@ const Dashboard = () => {
   const fetchClasses = useCallback(async () => {
     setLoading(true); // Bắt đầu loading khi gọi API
     try {
-      const response = await fetch(API_ENDPOINTS.STUDENT_CLASSES, {
-        method: "GET",
-        headers: {
-          Authorization: TokenService.getToken(),
-        },
-      });
+      const response = await apiCallGet(
+        API_ENDPOINTS.STUDENT_CLASSES,
+        navigate
+      );
       if (!response.ok) {
         if (response.status === 401) {
           navigate("/login");
