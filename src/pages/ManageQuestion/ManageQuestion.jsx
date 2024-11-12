@@ -38,11 +38,13 @@ import ImageManage from "~/components/Image/ImageManager";
 import { useMediaQuery } from "react-responsive";
 import "./ManageQuestion.scss";
 import TextArea from "antd/es/input/TextArea";
+import { useNavigate } from "react-router-dom";
 
 const { Title, Text } = Typography;
 
 function ManageQuestion({ isManageTest, onSelect, onDeselect, listQuestion }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { questionsByPage, page, hasMoreQuestions, status, error } =
     useSelector((state) => state.questions);
   const [forceUpdate, setForceUpdate] = useState(0);
@@ -54,10 +56,9 @@ function ManageQuestion({ isManageTest, onSelect, onDeselect, listQuestion }) {
   const [isEditing, setIsEditing] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(null);
   const [form] = Form.useForm();
-
   useEffect(() => {
     if (hasMoreQuestions && status !== "loading") {
-      dispatch(fetchQuestions());
+      dispatch(fetchQuestions({ navigate }));
     }
   }, [dispatch, hasMoreQuestions, page]); // Trigger fetch when page or hasMoreQuestions changes
 
@@ -175,10 +176,6 @@ function ManageQuestion({ isManageTest, onSelect, onDeselect, listQuestion }) {
             </Button>
           </Col>
         </Row>
-        {console.log(
-          questionsByPage,
-          Object.values(questionsByPage).flat().length
-        )}
         {questionsByPage && (
           <QuestionTable
             questions={Object.values(questionsByPage).flat()}

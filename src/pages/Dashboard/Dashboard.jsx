@@ -21,14 +21,14 @@ const Dashboard = () => {
         API_ENDPOINTS.STUDENT_CLASSES,
         navigate
       );
-      if (!response.ok) {
-        if (response.status === 401) {
-          navigate("/login");
-        }
-        throw new Error("Network response was not ok");
-      }
-      const data = await response.json();
-      setClasses(data);
+      console.log(response);
+      // if (!response.ok) {
+      //   if (response.status === 401) {
+      //     navigate("/login");
+      //   }
+      //   throw new Error("Network response was not ok");
+      // }
+      setClasses(response);
     } catch (error) {
       console.error("Error fetching classes:", error);
     } finally {

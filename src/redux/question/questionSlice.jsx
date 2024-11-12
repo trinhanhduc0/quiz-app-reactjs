@@ -1,68 +1,58 @@
-// src/redux/question/questionSlice.js
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { apiCall, apiCallGet } from "~/services/apiCallService";
 import API_ENDPOINTS from "~/config/config";
 
 const LINK = API_ENDPOINTS.QUESTIONS;
 
-// Async thunk to fetch questions with pagination
-
-// Async thunk để fetch câu hỏi với pagination
 export const fetchQuestions = createAsyncThunk(
   "questions/fetchQuestions",
-  async (_, { getState, rejectWithValue }) => {
-    const { questionsByPage, page, limit } = getState().questions; // Get current page and limit
+  async ({ navigate }, { getState, rejectWithValue }) => {
+    const { questionsByPage, page, limit } = getState().questions;
     try {
-      // Kiểm tra xem đã có câu hỏi cho trang hiện tại chưa
       if (questionsByPage[page]) {
-        return { data: [] }; // Nếu đã có câu hỏi cho trang này rồi, không cần fetch
+        return { data: [] };
       }
-
-      // Nếu chưa có câu hỏi cho trang này, gọi API
       const endpoint = `${LINK}?page=${page}&limit=${limit}`;
-      const response = await apiCallGet(endpoint);
-      return { data: response }; // Trả về dữ liệu fetch được
+      const response = await apiCallGet(endpoint, navigate);
+      return { data: response };
     } catch (error) {
-      return rejectWithValue(error.message); // Xử lý lỗi nếu fetch thất bại
+      return rejectWithValue(error?.message || "Failed to fetch questions");
     }
   }
 );
 
-// Async thunk to add a new question
 export const createQuestion = createAsyncThunk(
   "questions/addQuestion",
   async (newQuestion, { rejectWithValue }) => {
     try {
       const response = await apiCall(LINK, "POST", newQuestion);
-      return response; // Return the newly created question
+      return response;
     } catch (error) {
-      return rejectWithValue(error.message); // Handle errors during creation
+      return rejectWithValue(error?.message || "Failed to create question");
     }
   }
 );
 
-// Async thunk to update an existing question
 export const updateQuestion = createAsyncThunk(
   "questions/updateQuestion",
   async (updatedQuestion, { rejectWithValue }) => {
     try {
       const response = await apiCall(LINK, "PATCH", updatedQuestion);
-      return response; // Return the updated question
+      return response;
     } catch (error) {
-      return rejectWithValue(error.message); // Handle errors during update
+      return rejectWithValue(error?.message || "Failed to update question");
     }
   }
 );
 
-// Async thunk to delete a question
 export const deleteQuestion = createAsyncThunk(
   "questions/deleteQuestion",
   async (questionId, { rejectWithValue }) => {
     try {
-      await apiCall(LINK, "DELETE", { _id: questionId }); // Perform delete request
-      return questionId; // Return the deleted question ID
+      await apiCall(LINK, "DELETE", { _id: questionId });
+      return questionId;
     } catch (error) {
-      return rejectWithValue(error.message); // Handle errors during deletion
+      return rejectWithValue(error?.message || "Failed to delete question");
     }
   }
 );
@@ -70,12 +60,12 @@ export const deleteQuestion = createAsyncThunk(
 const questionSlice = createSlice({
   name: "questions",
   initialState: {
-    questionsByPage: {}, // List of questions
-    status: "idle", // idle, loading, succeeded, failed
-    page: 0, // Current page for pagination
-    limit: 50, // Limit of items per page
-    hasMoreQuestions: true, // Track if there are more questions to fetch
-    error: null, // Store error message, if any
+    questionsByPage: {},
+    status: "idle",
+    page: 0,
+    limit: 50,
+    hasMoreQuestions: true,
+    error: null,
   },
   reducers: {
     resetQuestions: (state) => {
@@ -101,12 +91,13 @@ const questionSlice = createSlice({
       })
       .addCase(fetchQuestions.fulfilled, (state, action) => {
         state.status = "succeeded";
-        if (action.payload.data == null || action.payload.data.length === 0) {
-          state.hasMoreQuestions = false; // Nếu không có câu hỏi nào, không cần fetch thêm
+        const currentPage = state.page;
+        const newQuestions = action.payload.data;
+
+        if (!newQuestions || newQuestions.length === 0) {
+          state.hasMoreQuestions = false;
         } else {
-          // Thêm câu hỏi vào trang hiện tại
-          const currentPage = state.page;
-          state.questionsByPage[currentPage] = action.payload.data;
+          state.questionsByPage[currentPage] = newQuestions;
         }
       })
       .addCase(fetchQuestions.rejected, (state, action) => {
@@ -115,16 +106,16 @@ const questionSlice = createSlice({
       })
       .addCase(createQuestion.fulfilled, (state, action) => {
         if (state.questionsByPage[0]) {
-          state.questionsByPage[0].unshift(action.payload); // Thêm câu hỏi mới vào đầu trang đầu tiên
+          state.questionsByPage[0].unshift(action.payload);
         } else {
-          state.questionsByPage[0] = [action.payload]; // Khởi tạo trang đầu tiên nếu nó chưa tồn tại
+          state.questionsByPage[0] = [action.payload];
         }
       })
       .addCase(updateQuestion.fulfilled, (state, action) => {
         Object.keys(state.questionsByPage).forEach((pageKey) => {
           state.questionsByPage[pageKey] = state.questionsByPage[pageKey].map(
             (question) =>
-              question._id === action.payload._id ? action.payload : question // Cập nhật câu hỏi khi tìm thấy
+              question._id === action.payload._id ? action.payload : question
           );
         });
       })
@@ -132,30 +123,25 @@ const questionSlice = createSlice({
         Object.keys(state.questionsByPage).forEach((pageKey) => {
           state.questionsByPage[pageKey] = state.questionsByPage[
             pageKey
-          ].filter(
-            (question) => question._id !== action.payload // Loại bỏ câu hỏi khi tìm thấy
-          );
-
-          // Nếu một trang không còn câu hỏi nào, xóa trang khỏi object
+          ].filter((question) => question._id !== action.payload);
           if (state.questionsByPage[pageKey].length === 0) {
             delete state.questionsByPage[pageKey];
           }
         });
       })
-      .addCase(createQuestion.rejected, (state, action) => {
-        state.status = "failed";
-        state.error = action.payload || action.error.message;
-      })
-      .addCase(updateQuestion.rejected, (state, action) => {
-        state.status = "failed";
-        state.error = action.payload || action.error.message;
-      })
-      .addCase(deleteQuestion.rejected, (state, action) => {
-        state.status = "failed";
-        state.error = action.payload || action.error.message;
-      });
+      .addMatcher(
+        (action) =>
+          ["createQuestion", "updateQuestion", "deleteQuestion"].some((type) =>
+            action.type.endsWith("rejected")
+          ),
+        (state, action) => {
+          state.status = "failed";
+          state.error = action.payload || action.error.message;
+        }
+      );
   },
 });
+
 export const { resetQuestions, incrementPage, setHasMoreQuestions } =
   questionSlice.actions;
 

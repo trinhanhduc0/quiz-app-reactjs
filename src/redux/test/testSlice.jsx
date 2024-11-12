@@ -6,8 +6,8 @@ import { apiCall, apiCallGet } from "~/services/apiCallService";
 const LINK = API_ENDPOINTS.TESTS;
 
 // Define the async thunk
-export const fetchTests = createAsyncThunk("tests/fetchTests", async () => {
-  const response = await apiCallGet(API_ENDPOINTS.TESTS);
+export const fetchTests = createAsyncThunk("tests/fetchTests", async ({ navigate }) => {
+  const response = await apiCallGet(API_ENDPOINTS.TESTS, navigate);
   return response;
 });
 

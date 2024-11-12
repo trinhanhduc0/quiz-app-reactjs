@@ -9,13 +9,10 @@ export const apiCallGet = async (endpoint, navigate) => {
       Authorization: TokenService.getToken(),
     },
   });
-  console.log(response);
-
   if (!response.ok) {
     if (response.status === 401 && navigate) {
       navigate("/login"); // Redirect to login if unauthorized
     }
-    throw new Error(`HTTP error! status: ${response.status}`);
   }
   return response.json();
 };

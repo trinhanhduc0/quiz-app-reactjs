@@ -29,12 +29,14 @@ import {
 import { TagsTwoTone, EditTwoTone, DeleteOutlined } from "@ant-design/icons";
 import "./ManageTest.scss";
 import ManageQuestion from "../ManageQuestion/ManageQuestion";
+import { useNavigate } from "react-router-dom";
 
 const { confirm } = Modal;
 const { Text } = Typography;
 
 function ManageTest() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { allTests, status, error } = useSelector((state) => state.tests);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -46,7 +48,7 @@ function ManageTest() {
 
   const fetchData = useCallback(async () => {
     try {
-      await dispatch(fetchTests());
+      await dispatch(fetchTests({ navigate }));
     } catch (error) {
       console.error("Error fetching data:", error);
       message.error("Failed to fetch data");
