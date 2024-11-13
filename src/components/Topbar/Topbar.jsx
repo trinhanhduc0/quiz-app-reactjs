@@ -103,14 +103,7 @@ const Topbar = ({ onClick, isOpen }) => {
               </div>
             ) : (
               <div className="logout-btn text-nowrap" onClick={showModal}>
-                <span
-                  className="link"
-                  onClick={() => {
-                    TokenService.logout();
-                  }}
-                >
-                  {t("sidebar.logout")}
-                </span>
+                <span className="link">{t("sidebar.logout")}</span>
               </div>
             )}
           </div>
