@@ -23,7 +23,6 @@ const QuestionTable = ({
   const handleSearch = (event) => {
     setSearchText(event.target.value);
   };
-  console.log(questions);
   const columns = [
     {
       name: "Actions",

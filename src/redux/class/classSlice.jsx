@@ -88,11 +88,9 @@ const classSlice = createSlice({
       })
       .addCase(saveClass.fulfilled, (state, action) => {
         const { _id } = action.payload;
-        console.log("payload: ", action.payload);
         state.allClass = state.allClass.map((cls) =>
           cls._id === _id ? action.payload : cls
         );
-        console.log("state.allClass", state.allClass);
       })
       .addCase(createCode.fulfilled, (state, action) => {
         if (action.payload) {

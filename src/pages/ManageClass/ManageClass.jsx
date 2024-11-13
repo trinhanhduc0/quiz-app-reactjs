@@ -44,8 +44,7 @@ import "./ManageClass.scss";
 const { Option } = Select;
 const { Text } = Typography;
 
-const ClassCodeComponent = ({ _id, createCode }) => {
-  const currentClassId = _id;
+const ClassCodeComponent = ({ _id, test_id, createCode }) => {
   const [cookies, setCookie] = useCookies(["classIds"]);
   const [classCode, setClassCode] = useState(null);
   const [expiryMinutes, setExpiryMinutes] = useState(5); // Default 5 minutes
@@ -54,7 +53,7 @@ const ClassCodeComponent = ({ _id, createCode }) => {
   const handleGenerateCode = useCallback(
     async (classID) => {
       try {
-        const response = await createCode(classID, expiryMinutes);
+        const response = await createCode(classID, expiryMinutes, test_id);
         const code = response.payload;
         message.success(`Class code generated: ${code}`);
         setClassCode(code);
@@ -185,8 +184,8 @@ function ManageClass() {
     }
   }, []);
 
-  const handleCreateCode = useCallback(async (_id, minute) => {
-    return await dispatch(createCode({ _id, minute }));
+  const handleCreateCode = useCallback(async (_id, minute, test_id) => {
+    return await dispatch(createCode({ _id, minute, test_id }));
   }, []);
 
   const handleAddClass = useCallback(() => {
@@ -217,9 +216,6 @@ function ManageClass() {
         await dispatch(action({ values }));
         message.success(messageText);
 
-        if (!isEditing) {
-          console.log(allClass);
-        }
         setIsModalOpen(false);
       } catch (error) {
         console.error("Error saving class:", error);
@@ -333,10 +329,10 @@ function ManageClass() {
 
   return (
     <div className="manage-class-container">
-      <Row justify="space-between" align="middle" style={{ marginBottom: 20 }}>
-        <Col>
-          <h1>Manage Class</h1>
-        </Col>
+      <h2 className="text-2xl font-semibold text-gray-800 text-center border-b-2 border-indigo-500 pb-2">
+        Manage Class
+      </h2>
+      <Row>
         <Col>
           <Button
             size={"large"}
@@ -399,6 +395,7 @@ function ManageClass() {
               <ClassCodeComponent
                 _id={form.getFieldValue("_id")}
                 createCode={handleCreateCode}
+                test_id={form.getFieldValue("test_id")}
               />
             </>
           )}

@@ -41,6 +41,7 @@ const Login = () => {
         const data = await response.json();
         await TokenService.saveToken(data.token);
         navigate("/dashboard");
+        window.location.reload();
       } catch (error) {
         console.error("Error:", error);
       }
@@ -56,7 +57,6 @@ const Login = () => {
 
   return (
     <div className="login-container">
-      <h2>{t("login.title")}</h2>
       <form className="login-form" onSubmit={handleEmailLogin}>
         <input
           className="input-login"

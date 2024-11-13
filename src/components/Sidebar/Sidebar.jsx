@@ -4,6 +4,7 @@ import "./Sidebar.scss";
 import { AiOutlineDashboard, AiOutlineLogout } from "react-icons/ai";
 import { BiBookBookmark, BiTestTube } from "react-icons/bi";
 import { useTranslation } from "react-i18next"; // Import useTranslation
+import TokenService from "~/services/TokenService";
 
 const Sidebar = forwardRef(({ isOpen, toggle }, ref) => {
   const { t } = useTranslation(); // Use translation hook
@@ -36,11 +37,29 @@ const Sidebar = forwardRef(({ isOpen, toggle }, ref) => {
             <BiTestTube className="icon" /> {t("sidebar.manageQuestions")}
           </Link>
         </li>
-        <li onClick={toggle}>
-          <Link to="/logout">
-            <AiOutlineLogout className="icon" /> {t("sidebar.logout")}
-          </Link>
-        </li>
+        {TokenService.getToken() == null ? (
+          <li onClick={toggle}>
+            <Link
+              to="/logout"
+              onClick={() => {
+                TokenService.logout();
+              }}
+            >
+              <AiOutlineLogout className="icon" /> {t("sidebar.login")}
+            </Link>
+          </li>
+        ) : (
+          <li onClick={toggle}>
+            <Link
+              to="/logout"
+              onClick={() => {
+                TokenService.logout();
+              }}
+            >
+              <AiOutlineLogout className="icon" /> {t("sidebar.logout")}
+            </Link>
+          </li>
+        )}
       </ul>
     </div>
   );

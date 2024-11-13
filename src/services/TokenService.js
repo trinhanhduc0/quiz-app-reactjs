@@ -19,6 +19,15 @@ class TokenService {
   removeToken() {
     localStorage.removeItem(this.nameLocalStorage);
   }
+
+  logout() {
+    Object.keys(localStorage).forEach((key) => {
+      console.log(key);
+      if (key !== "i18nextLng") {
+        localStorage.removeItem(key); // Remove all except "i18nextLng"
+      }
+    });
+  }
 }
 
 export default new TokenService();

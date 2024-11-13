@@ -34,7 +34,6 @@ export const apiCall = async (endpoint, method, body, navigate) => {
     }
     return response;
   }
-  console.log(response);
 
   return response.json();
 };

@@ -93,7 +93,6 @@ function ManageTest() {
       };
 
       try {
-        console.log(formattedValues);
         if (isEditing) {
           await dispatch(saveTest({ values: formattedValues }));
           message.success("Test updated successfully!");
@@ -193,7 +192,9 @@ function ManageTest() {
 
   return (
     <div className="manage-test-container w-screen">
-      <h1>Manage Tests</h1>
+      <h2 className="text-3xl font-bold text-center text-gray-900 mb-4 border-b-4 border-blue-600 pb-2">
+        Manage Tests
+      </h2>
       <Row justify="space-between" align="middle" style={{ marginBottom: 20 }}>
         <Col>
           <Button type="primary" onClick={() => handleOpenModal()}>

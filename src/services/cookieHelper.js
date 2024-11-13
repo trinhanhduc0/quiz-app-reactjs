@@ -21,8 +21,6 @@ export const setCookieWithExpiry = (setCookie, key, value, options = {}) => {
  */
 export const getCookieValue = (cookies, key) => {
   const value = cookies[key];
-
-  console.log(value);
   // Safely attempt to parse the value if it's a JSON string
   try {
     return value ? value : null;
@@ -37,7 +35,5 @@ export const getCookieValue = (cookies, key) => {
  */
 export const isCookieExpired = (expireDate) => {
   const currentTime = new Date().getTime();
-  console.log(currentTime, expireDate);
-  console.log(expireDate.getTime() < currentTime);
   return expireDate.getTime() < currentTime;
 };

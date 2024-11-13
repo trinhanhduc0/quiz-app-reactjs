@@ -70,7 +70,6 @@ function ManageQuestion({ isManageTest, onSelect, onDeselect, listQuestion }) {
     }
   };
   const handleOpenModal = (questionData = null) => {
-    console.log(questionData);
     setIsEditing(!!questionData);
     setCurrentQuestion(questionData);
     form.setFieldsValue(questionData || {});
@@ -160,7 +159,9 @@ function ManageQuestion({ isManageTest, onSelect, onDeselect, listQuestion }) {
   return (
     <div className="manage-question-container">
       <Card>
-        <Title level={2}>Manage Questions</Title>
+        <h2 className="text-3xl font-bold text-center text-gray-900 mb-4 border-b-4 border-blue-600 pb-2">
+          Manage Question
+        </h2>
         <Row
           justify="space-between"
           align="middle"

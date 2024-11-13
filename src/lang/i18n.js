@@ -11,6 +11,12 @@ i18n
     resources: {
       en: {
         translation: {
+          dashboard: {
+            join_class: "Join a Class",
+            no_classes: "You haven't joined any classes yet.",
+            author: "Author",
+            tags: "Tags",
+          },
           login: {
             title: "Login",
             emailPlaceholder: "Email",
@@ -24,7 +30,9 @@ i18n
             manageClass: "Manage Class",
             manageTest: "Manage Test",
             manageQuestions: "Manage Questions",
+            login: "Login",
             logout: "Logout",
+            logout_comfirm: "Are you sure you want to logout?",
           },
           welcome: "Welcome",
           practice: "Practice",
@@ -80,6 +88,12 @@ i18n
       },
       vi: {
         translation: {
+          dashboard: {
+            join_class: "Tham gia lớp học",
+            no_classes: "Chưa có dữ liệu về lớp học bạn đã tham gia.",
+            author: "Tác giả",
+            tags: "Thẻ",
+          },
           login: {
             title: "Đăng nhập",
             emailPlaceholder: "Email",
@@ -93,7 +107,9 @@ i18n
             manageClass: "Quản lý lớp học",
             manageTest: "Quản lý bài kiểm tra",
             manageQuestions: "Quản lý câu hỏi",
+            login: "Đăng nhập",
             logout: "Đăng xuất",
+            logout_comfirm: "Bạn chắc chắn muốn đăng xuất",
           },
           welcome: "Chào mừng",
           practice: "Luyện tập",

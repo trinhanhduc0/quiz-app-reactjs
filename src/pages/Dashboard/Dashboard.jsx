@@ -1,42 +1,33 @@
 import React, { useState, useEffect, useCallback } from "react";
-import TokenService from "~/services/TokenService";
 import { useNavigate } from "react-router-dom";
 import API_ENDPOINTS from "~/config/config";
-import "./Dashboard.scss";
 import JoinClass from "~/components/JoinClass/JoinClass";
-import { Button, Spin } from "antd"; // Thêm Spin cho loading state
+import { Button, Spin } from "antd";
 import { apiCallGet } from "../../services/apiCallService";
+import { useTranslation } from "react-i18next"; // Import i18n hook
 
 const Dashboard = () => {
+  const { t } = useTranslation(); // Hook để truy cập i18n
   const [classes, setClasses] = useState([]);
   const [isJoinClassOpen, setIsJoinClassOpen] = useState(false);
-  const [loading, setLoading] = useState(true); // State loading để hiển thị khi fetching dữ liệu
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  // Hàm fetch classes được tối ưu để sử dụng useCallback
   const fetchClasses = useCallback(async () => {
-    setLoading(true); // Bắt đầu loading khi gọi API
+    setLoading(true);
     try {
       const response = await apiCallGet(
         API_ENDPOINTS.STUDENT_CLASSES,
         navigate
       );
-      console.log(response);
-      // if (!response.ok) {
-      //   if (response.status === 401) {
-      //     navigate("/login");
-      //   }
-      //   throw new Error("Network response was not ok");
-      // }
       setClasses(response);
     } catch (error) {
       console.error("Error fetching classes:", error);
     } finally {
-      setLoading(false); // Kết thúc loading
+      setLoading(false);
     }
   }, []);
 
-  // Gọi fetchClasses chỉ 1 lần khi component mount
   useEffect(() => {
     fetchClasses();
   }, [fetchClasses]);
@@ -56,14 +47,13 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="dashboard">
-      <div className="joinClass">
+    <div className="dashboard max-w-7xl mx-auto px-4 py-6">
+      <div className="joinClass mb-6">
         <Button
           onClick={openJoinClassModal}
-          className="open-join-class-button"
-          type="primary"
+          className="open-join-class-button bg-blue-600 text-white hover:bg-blue-700 transition-all duration-300 py-2 px-4 rounded-lg shadow-md"
         >
-          Join a Class
+          {t("dashboard.join_class")} {/* Dùng i18n cho nút */}
         </Button>
 
         <JoinClass
@@ -71,17 +61,18 @@ const Dashboard = () => {
           onRequestClose={closeJoinClassModal}
         />
       </div>
-      <p className="welcome-text">Welcome to your dashboard!</p>
+
+      {/* Dùng i18n cho lời chào */}
       {loading ? (
-        <div className="loading-state">
+        <div className="loading-state flex justify-center items-center">
           <Spin size="large" />
         </div>
       ) : classes && classes.length > 0 ? (
-        <div className="class-list">
+        <div className="class-list grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {classes.map((classItem) => (
             <div
               key={classItem._id}
-              className="class-card"
+              className="class-card bg-white p-6 rounded-lg shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 cursor-pointer"
               onClick={() =>
                 handleClassClick(
                   classItem._id,
@@ -90,20 +81,26 @@ const Dashboard = () => {
                 )
               }
             >
-              <h2 className="class-title">{classItem.class_name}</h2>
-              <div className="class-details">
-                <p>
-                  <strong>Author:</strong> {classItem.author_mail}
+              <h2 className="class-title text-xl font-semibold text-gray-900 mb-4">
+                {classItem.class_name}
+              </h2>
+              <div className="class-details text-gray-700">
+                <p className="mb-2">
+                  <strong>{t("dashboard.author")}:</strong>{" "}
+                  {classItem.author_mail}
                 </p>
                 <p>
-                  <strong>Tags:</strong> {classItem.tags.join(", ")}
+                  <strong>{t("dashboard.tags")}:</strong>{" "}
+                  {classItem.tags.join(", ")}
                 </p>
               </div>
             </div>
           ))}
         </div>
       ) : (
-        <p className="no-classes">No classes found.</p>
+        <p className="no-classes text-center text-gray-600">
+          {t("dashboard.no_classes")}
+        </p>
       )}
     </div>
   );

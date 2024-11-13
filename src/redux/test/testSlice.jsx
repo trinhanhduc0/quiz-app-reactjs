@@ -64,7 +64,6 @@ const testSlice = createSlice({
       })
       .addCase(saveTest.fulfilled, (state, action) => {
         const { _id } = action.payload;
-        console.log(action.payload);
         state.allTests = state.allTests.map((test) =>
           test._id === _id ? action.payload : test
         );

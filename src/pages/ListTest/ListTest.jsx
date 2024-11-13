@@ -30,8 +30,8 @@ const ListTest = () => {
         navigate
       );
 
-      const testsData = await testsResponse;
-      setTests(testsData);
+      //const testsData = await testsResponse;
+      setTests(testsResponse);
     } catch (error) {
       setError("There was an error loading the tests. Please try again later.");
       console.error("Error fetching class data:", error);

@@ -20,7 +20,6 @@ function ImageManage({ isOpen, onClose, onSelectImage }) {
     try {
       setLoading(true);
       const res = await apiCallGet(API_ENDPOINTS.GETIMAGEFILES, navigate);
-      console.log(res);
       setListImage(res || []);
     } catch (error) {
       message.error("Failed to fetch images.");
@@ -40,7 +39,6 @@ function ImageManage({ isOpen, onClose, onSelectImage }) {
       );
       if (res.ok) {
         const responseText = await res.text();
-        console.log("Server response:", responseText);
         message.success(responseText || "Image uploaded successfully");
         await fetchListImage();
         onSuccess(responseText);
