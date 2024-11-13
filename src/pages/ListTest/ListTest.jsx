@@ -86,25 +86,27 @@ const ListTest = () => {
                 <pre className="test-description">{test.descript}</pre>
                 <div className="test-dates">
                   <div>
+                    <span className="start-date">
+                      {startTime.toLocaleDateString()}
+                      {" - "}
+                    </span>
                     <span className="start-time">
                       {startTime.toLocaleTimeString([], {
                         hour: "2-digit",
                         minute: "2-digit",
                       })}
                     </span>
-                    <span className="start-date">
-                      {startTime.toLocaleDateString()}
-                    </span>
                   </div>
                   <div>
+                    <span className="end-date">
+                      {endTime.toLocaleDateString()}
+                      {" - "}
+                    </span>
                     <span className="end-time">
                       {endTime.toLocaleTimeString([], {
                         hour: "2-digit",
                         minute: "2-digit",
                       })}
-                    </span>
-                    <span className="end-date">
-                      {endTime.toLocaleDateString()}
                     </span>
                   </div>
                 </div>
