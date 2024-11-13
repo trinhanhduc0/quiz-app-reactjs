@@ -26,7 +26,7 @@ import {
   Typography,
   InputNumber,
 } from "antd";
-import { TagsTwoTone, EditTwoTone, DeleteOutlined } from "@ant-design/icons";
+import { TagsTwoTone, EditTwoTone, DeleteOutlined,PlusSquareTwoTone } from "@ant-design/icons";
 import "./ManageTest.scss";
 import ManageQuestion from "../ManageQuestion/ManageQuestion";
 import { useNavigate } from "react-router-dom";

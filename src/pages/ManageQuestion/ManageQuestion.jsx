@@ -31,6 +31,7 @@ import {
   UpOutlined,
   DownOutlined,
   CloseOutlined,
+  PlusSquareTwoTone,
 } from "@ant-design/icons";
 
 import QuestionTable from "./QuestionTable";
