@@ -197,9 +197,12 @@ function ManageTest() {
       </h2>
       <Row justify="space-between" align="middle" style={{ marginBottom: 20 }}>
         <Col>
-          <Button type="primary" onClick={() => handleOpenModal()}>
-            Add Test
-          </Button>
+          <Button
+            size={"large"}
+            shape="default"
+            icon={<PlusSquareTwoTone />}
+            onClick={() => handleOpenModal()}
+          />
         </Col>
       </Row>
 

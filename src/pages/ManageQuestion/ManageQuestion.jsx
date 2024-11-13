@@ -169,12 +169,11 @@ function ManageQuestion({ isManageTest, onSelect, onDeselect, listQuestion }) {
         >
           <Col>
             <Button
-              type="primary"
-              size="large"
+              size={"large"}
+              shape="default"
+              icon={<PlusSquareTwoTone />}
               onClick={() => handleOpenModal()}
-            >
-              Add Question
-            </Button>
+            />
           </Col>
         </Row>
         {questionsByPage && (
