@@ -655,7 +655,7 @@ function ManageQuestion({ isManageTest, onSelect, onDeselect, listQuestion }) {
                       </Form.Item>
                       <Button
                         onClick={() => remove(name)}
-                        icon={<Minus CircleOutlined />}
+                        icon={<MinusCircleOutlined />}
                         danger
                       >
                         Remove
